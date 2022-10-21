@@ -8,10 +8,11 @@
 
 <body>
   <script type="module">
-    import init, { } from "./target/learn_worker.js";
+    import init, { start } from "./target/learn_worker.js";
     init().then(() => {
       // greet("WebAssembly");
       // run_thread();
+      start();
     });
   </script>
   <p>A greeting from rust looks like...</p>

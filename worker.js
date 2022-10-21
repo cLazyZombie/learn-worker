@@ -1,3 +1,4 @@
+// import init, { add } from './target/learn_worker.js';
 import init, { add } from './target/learn_worker.js';
 console.log('worker.js init');
 

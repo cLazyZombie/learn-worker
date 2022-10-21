@@ -20,19 +20,18 @@ pub fn greet() {
     alert("Hello, learn-worker!");
 }
 
-#[wasm_bindgen(start)]
-pub async fn main() -> Result<(), JsValue> {
+// #[wasm_bindgen(start)]
+#[wasm_bindgen]
+pub async fn start() -> Result<(), JsValue> {
     utils::set_panic_hook();
-    // let _ = console_log::init_with_level(log::Level::Info);
     console_log::init_with_level(log::Level::Info).unwrap();
-    // let _ = console_log::init_with_level(log::Level::Info);
     log::info!("hello");
 
-    let f = Rc::new(RefCell::new(None));
-    let g = f.clone();
-
+    let (sender, receiver) = crossbeam_channel::unbounded();
     let on_worker_message = Closure::wrap(Box::new(move |e: MessageEvent| {
+        let val = e.data().as_f64().unwrap() as i32;
         log::info!("on_worker_message {}", e.data().as_f64().unwrap() as i32);
+        sender.send(val).unwrap();
     }) as Box<dyn FnMut(MessageEvent)>);
 
     let worker_handle = start_worker();
@@ -42,6 +41,8 @@ pub async fn main() -> Result<(), JsValue> {
     }
     forget(on_worker_message);
 
+    let f = Rc::new(RefCell::new(None));
+    let g = f.clone();
     let mut i = 0;
     *g.borrow_mut() = Some(Closure::wrap(Box::new(move || {
         if web_sys::window().is_none() {
@@ -55,6 +56,10 @@ pub async fn main() -> Result<(), JsValue> {
         //     let _ = f.borrow_mut().take();
         //     return;
         // }
+
+        if let Ok(received) = receiver.try_recv() {
+            log::info!("received {}", received);
+        }
 
         let worker = &*worker_handle.borrow();
         let value = format!("{}", i);
