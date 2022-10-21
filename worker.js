@@ -1,9 +1,10 @@
-// import init, { add } from './target/learn_worker.js';
-import init, { add } from './target/learn_worker.js';
+importScripts('./target/learn_worker.js');
 console.log('worker.js init');
 
+const { add } = wasm_bindgen;
+
 async function init_worker() {
-    await init();
+    await wasm_bindgen('./target/learn_worker_bg.wasm');
     console.log('worker.js init done');
 
     self.onmessage = async event => {

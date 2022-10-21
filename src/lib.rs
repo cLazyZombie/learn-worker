@@ -82,7 +82,8 @@ pub async fn start() -> Result<(), JsValue> {
 
 fn start_worker() -> Rc<RefCell<Worker>> {
     let mut options = web_sys::WorkerOptions::new();
-    options.type_(web_sys::WorkerType::Module);
+    // options.type_(web_sys::WorkerType::Module);
+    options.type_(web_sys::WorkerType::Classic);
     let worker_handle = Rc::new(RefCell::new(
         Worker::new_with_options("./worker.js", &options).unwrap(),
     ));

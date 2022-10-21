@@ -7,13 +7,15 @@
 </head>
 
 <body>
-  <script type="module">
-    import init, { start } from "./target/learn_worker.js";
-    init().then(() => {
-      // greet("WebAssembly");
-      // run_thread();
-      start();
-    });
+  <script src="./target/learn_worker.js"></script>
+  <script>
+    const { start } = wasm_bindgen;
+    console.log("start");
+    async function run() {
+      await wasm_bindgen('./target/learn_worker_bg.wasm');
+      await start();
+    }
+    run();
   </script>
   <p>A greeting from rust looks like...</p>
   <!-- <script src="./coi-serviceworker.js"></script> -->
