@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8" />
+  <title>hello-wasm example</title>
+</head>
+
+<body>
+  <script type="module">
+    import init, { } from "./target/learn_thread.js";
+    init().then(() => {
+      // greet("WebAssembly");
+      // run_thread();
+    });
+  </script>
+  <p>A greeting from rust looks like...</p>
+  <!-- <script src="./coi-serviceworker.js"></script> -->
+</body>
+
+</html>
